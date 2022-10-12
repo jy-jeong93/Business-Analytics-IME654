@@ -1,3 +1,3 @@
 # Business-Analytics-IME654
 
-1. Dimensionality Reduction
+## 1. Dimensionality Reduction
