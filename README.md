@@ -9,4 +9,4 @@
 
 
 ## 2. Kernel-based Learning
-* Support Vector Machine(SVM)
+* Support Vector Machine(SVM)[[Here]](https://github.com/jy-jeong93/Business-Analytics-IME654/tree/main/2.Kernel-based%20Learning)
