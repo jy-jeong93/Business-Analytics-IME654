@@ -1,3 +1,18 @@
 ## Support Vector Machines with Python Tutorial
 
 #### --SVM 설명 ([ppt slide](https://github.com/jy-jeong93/Business-Analytics-IME654/blob/main/2.Kernel-based%20Learning/SVM_slide.pdf))--
+
+이번 튜토리얼에서는 SVM을 소개하고 정형 데이터셋을 통해서 다양한 kernel과 SVM을 적용해보는 것을 목표로 한다.
+
+### 튜토리얼 목차
+ 1.
+ 2.
+ 3.
+ 4.
+
+
+
+
+## 1. Support Vector Machines(SVM)이란?
+
+Support vector machines(SVM)은 머신러닝 분야 중 하나로써 신호 처리, 의료 응용 분야, 자연어 처리, 음성 및 영상 인식 등 다양한 분야에서 여러 분류 및 회귀 문제에 사용되는 지도 학습 알고리즘이다. 이 알고리즘은 하나의 클래스에 대한 데이터 포인트들을 다른 클래스들의 데이터 포인트들과 최대한 잘 구분해내는 초평면(hyperplane)을 찾는 것을 목표로 한다.
