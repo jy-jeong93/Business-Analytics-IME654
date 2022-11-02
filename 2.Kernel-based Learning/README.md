@@ -18,5 +18,6 @@
 Support vector machines(SVM)은 머신러닝 분야 중 하나로써 신호 처리, 의료 응용 분야, 자연어 처리, 음성 및 영상 인식 등 다양한 분야에서 여러 분류 및 회귀 문제에 사용되는 지도 학습 알고리즘이다. 이 알고리즘은 하나의 클래스에 대한 데이터 포인트들을 다른 클래스들의 데이터 포인트들과 최대한 잘 구분해내는 초평면(hyperplane)을 찾는 것을 목표로 한다.
 
 <p align="center">
+ 
 ![image](https://user-images.githubusercontent.com/115562646/199581342-49bcf5c4-d833-49f2-bd87-4483e5d64ea7.png)
 </p>
