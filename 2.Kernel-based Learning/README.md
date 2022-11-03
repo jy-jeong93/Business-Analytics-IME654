@@ -28,9 +28,6 @@ Support vector machines(SVM)은 머신러닝 분야 중 하나로써 신호 처�
 
 Linear SVM은 데이터 포인트들을 최대한 잘 구분해내는 선형분리를 찾는 것이 목적이며, 아래 그림과 같이 두 데이터의 클래스를 분리할 수 있는 수 많은 직선들 중 두 데이터 클래스간 간격(margin)이 최대가 되는 MMH(Maximum Marginal Hyperplane, 최대 마진 초평면)을 찾아 구분하는 방법이다.
 ![image](https://user-images.githubusercontent.com/115562646/199652997-789ca4a9-59c0-4a2c-ba9f-d587d687d217.png)
-
-
-![image](https://user-images.githubusercontent.com/115562646/199655752-3678d822-137b-47b0-b062-501120b8371c.png)
 ![image](https://user-images.githubusercontent.com/115562646/199655813-86c6ea08-e208-4033-9352-8013e36d60c4.png)
 
 
