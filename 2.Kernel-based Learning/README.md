@@ -134,11 +134,95 @@ plt.show()
 데이터에 노이즈 또는 이상치가 존재한다면 기존 Hard Margin SVM을 적용하긴 힘들 것이다. 이러한 한계점을 해결하기 위해 Soft Margin SVM이 개발되었다. Soft Margin SVM은 Hard Margin SVM의 support vector가 위치한 경계선에서 slack variable을 두어 오류를 일정 수준 허용해주는 방법이다.
 
 이때 선형 분리를 하기 힘든 예제를 다시 생성하였고 이 데이터를 가지고 실험을 진행하였다.
+```python
+
+from sklearn import datasets
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import LinearSVC
+
+plt.figure(figsize=(8, 8))
+plt.title("두개의 독립변수 모두 클래스와 상관관계가 있는 가상데이터")
+X, y = make_classification(n_samples=290, n_features=2, n_informative=2, n_redundant=0,
+                           n_clusters_per_class=1, random_state=220)
+plt.scatter(X[:, 0], X[:, 1], marker='o', c=y,
+            s=100, edgecolor="k", linewidth=2)
+
+plt.xlim(-4, 4)
+plt.ylim(-4, 4)
+plt.xlabel("$X_1$")
+plt.ylabel("$X_2$")
+plt.show()
+
+```
+![image](https://user-images.githubusercontent.com/115562646/199673403-9a731ac8-39b4-49d9-b06c-8f999db352b5.png)
+
+
 
 ![image](https://user-images.githubusercontent.com/115562646/199666949-26345b6f-9471-41a4-a6bc-e804cadcc406.png)
 상단 그림의 수식에서 C는 hyperparameter인 slack variable이며 일종의 penalty라고 볼 수 있다.
+
 * C가 커지면 오류를 허용하는 정도가 작아지며, 따라서 Margin이 작아진다.
 * C가 작아지면 오류를 허용하는 정도가 커지며, 따라서 Margin이 커진다.
 
 하단에서 C=1일때와 C=100일때 비교를 진행하겠다.
 
+```python 
+
+
+scaler = StandardScaler()
+svm_clf1 = LinearSVC(C=1, loss="hinge", random_state=42)
+svm_clf2 = LinearSVC(C=100, loss="hinge", random_state=42)
+
+scaled_svm_clf1 = Pipeline([
+        ("scaler", scaler),
+        ("linear_svc", svm_clf1),
+    ])
+scaled_svm_clf2 = Pipeline([
+        ("scaler", scaler),
+        ("linear_svc", svm_clf2),
+    ])
+
+scaled_svm_clf1.fit(X, y)
+scaled_svm_clf2.fit(X, y)
+
+
+b1 = svm_clf1.decision_function([-scaler.mean_ / scaler.scale_])
+b2 = svm_clf2.decision_function([-scaler.mean_ / scaler.scale_])
+w1 = svm_clf1.coef_[0] / scaler.scale_
+w2 = svm_clf2.coef_[0] / scaler.scale_
+svm_clf1.intercept_ = np.array([b1])
+svm_clf2.intercept_ = np.array([b2])
+svm_clf1.coef_ = np.array([w1])
+svm_clf2.coef_ = np.array([w2])
+t = y * 2 - 1
+support_vectors_idx1 = (t * (X.dot(w1) + b1) < 1).ravel()
+support_vectors_idx2 = (t * (X.dot(w2) + b2) < 1).ravel()
+svm_clf1.support_vectors_ = X[support_vectors_idx1]
+svm_clf2.support_vectors_ = X[support_vectors_idx2]
+
+
+plt.figure(figsize=(12, 4))
+plt.subplot(121)
+plt.plot(X[:, 0][y==1], X[:, 1][y==1], "g^", label="class0")
+plt.plot(X[:, 0][y==0], X[:, 1][y==0], "bs", label="class1")
+plot_svc_decision_boundary(svm_clf1, -10, 10)
+plt.xlabel("feature1", fontsize=14)
+plt.ylabel("feature2", fontsize=14)
+plt.legend(loc="upper left", fontsize=14)
+plt.title("$C = {}$".format(svm_clf1.C), fontsize=16)
+plt.axis([-5, 5, -5, 5])
+
+plt.subplot(122)
+plt.plot(X[:, 0][y==1], X[:, 1][y==1], "g^")
+plt.plot(X[:, 0][y==0], X[:, 1][y==0], "bs")
+plot_svc_decision_boundary(svm_clf2, -10, 10)
+plt.xlabel("feature1", fontsize=14)
+plt.title("$C = {}$".format(svm_clf2.C), fontsize=16)
+plt.axis([-5, 5, -5, 5]);
+
+```
+
+![image](https://user-images.githubusercontent.com/115562646/199673554-fe546f3b-2c48-4a54-bbbe-ad61f6dec83c.png)
+
+C=1일때는 허용해주는 오류 정도가 크기때문에 마진이 커진 것을 확인할 수 있고, C=100일 경우 허용해주는 오류 정도가 적기때문에 마진이 작아진 것을 확인할 수 있다.
