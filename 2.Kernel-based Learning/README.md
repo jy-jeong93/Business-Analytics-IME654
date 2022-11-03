@@ -32,6 +32,4 @@ Linear SVM은 데이터 포인트들을 최대한 잘 구분해내는 선형분�
 
 
 ## 3. Linear SVM Classification - wine dataset
-~~~ 데이터 불러오기 ipynb 추가 ~~~
-
 ![image](https://user-images.githubusercontent.com/115562646/199666949-26345b6f-9471-41a4-a6bc-e804cadcc406.png)
