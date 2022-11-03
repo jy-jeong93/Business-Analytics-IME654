@@ -35,6 +35,5 @@ Linear SVM은 데이터 포인트들을 최대한 잘 구분해내는 선형분�
 ~~~ 데이터 불러오기 ipynb 추가 ~~~
 
 
-![image](https://user-images.githubusercontent.com/115562646/199666534-bdfa8f01-d802-453f-aea8-fcee9cb69903.png)
-
+![image](https://user-images.githubusercontent.com/115562646/199666596-abba8c21-575d-4146-bd7e-b59a814c94f3.png)
 
