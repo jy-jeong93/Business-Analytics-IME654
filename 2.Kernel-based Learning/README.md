@@ -51,10 +51,9 @@ plt.ylabel("$X_2$")
 plt.show()
 
 ```
-```
 ![image](https://user-images.githubusercontent.com/115562646/199671510-d6e2364e-dcfb-43e3-b857-98fe42fbbb91.png)
 
-```
+
 
 ## 2. Linear SVMs - Hard Margin Classification
 
