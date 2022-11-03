@@ -22,6 +22,7 @@ Support vector machines(SVM)은 머신러닝 분야 중 하나로써 신호 처�
 ![image](https://user-images.githubusercontent.com/115562646/199581342-49bcf5c4-d833-49f2-bd87-4483e5d64ea7.png)
  
 </p>
+```python
 import os
 import numpy as np
 
@@ -46,7 +47,7 @@ plt.ylim(-4, 4)
 plt.xlabel("$X_1$")
 plt.ylabel("$X_2$")
 plt.show()
-
+```
 ## 2. Linear SVMs - Hard Margin Classification
 
 Linear SVM은 데이터 포인트들을 최대한 잘 구분해내는 선형분리를 찾는 것이 목적이며, 아래 그림과 같이 두 데이터의 클래스를 분리할 수 있는 수 많은 직선들 중 두 데이터 클래스간 간격(margin)이 최대가 되는 MMH(Maximum Marginal Hyperplane, 최대 마진 초평면)을 찾아 구분하는 방법이다.
