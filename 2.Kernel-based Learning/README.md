@@ -346,8 +346,20 @@ plt.show()
 ```
 
 # Polynomial Kernel 적용시
+![image](https://user-images.githubusercontent.com/115562646/199675036-28bde373-1b41-4c34-85c2-9a3cf3709252.png)
+
 ![image](https://user-images.githubusercontent.com/115562646/199674639-4e45d3f9-8883-44ab-b075-b0809eb81252.png)
+
+r값이 커질수록 더 굴곡진 분류 경계면을 확인할 수 있다. Polynomial 커널을 사용하면 다항식을 통해서 더 높은 차원으로 변형하여 초평면의 분류 경계를 얻을 수 있다.
+
 
 
 # RBF Kernel 적용시
 ![image](https://user-images.githubusercontent.com/115562646/199674755-47eca25d-0cb1-4d3a-bb7b-a1e23e513ed7.png)
+
+gamma 파라미터는 분류 경계를 얼마나 유연하게 그을 것인지 정해주는 파라미터이다. 상단의 SVM에서 오류 허용 정도를 정하는 C와 비슷한 개념이라고 볼 수 있다.
+
+* gamma 값이 높아지면 학습 데이터에 많이 의존해서 분류 경계가 굴곡지게 된다. 그러나 너무 높은 gamma값은 과대적합을 초래할 수 있다.
+* 반대로 gamma 값이 낮아지면 학습 데이터에 의존하지 않겠다는 의미이므로 분류 경계가 직선에 가까워진다. 그러나 너무 낮은 gamma값은 과소적합을 초래할 수 있다.
+
+상단 그림을 통해서 gamma 값이 0.1에서 5로 바뀌었을 때, 분류 경계가 더욱 굴곡지게 바뀐 것을 확인할 수 있다. 
