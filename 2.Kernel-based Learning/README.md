@@ -122,8 +122,19 @@ plt.show()
 
 ```
 
+![image](https://user-images.githubusercontent.com/115562646/199672455-73ac1882-6d13-49da-afc4-13b7548d728e.png)
+
+상단의 좌측 그림을 보면 생성된 데이터셋을 명확히 구분짓지 못하는 것을 볼 수 있다. 우측 그림의 SVM 방식은 Hard Margin SVM이라고 한다. 이 방식이 두 개의 클래스를 분리함에 있어서 모든 데이터 포인트가 분리 초평면을 기준으로 정확히 나눠주는 방식이다. 
+하지만 데이터에 노이즈 또는 이상치, 두 클래스 사이의 overlap 등이 존재한다면 두 클래스를 엄격하게 분리하기는 힘들 것이다.
+![image](https://user-images.githubusercontent.com/115562646/199673135-21aaf402-0b91-4224-b01f-a32e63bdac6a.png)
+
 
 ## 3. Soft Margin Classification
+
+데이터에 노이즈 또는 이상치가 존재한다면 기존 Hard Margin SVM을 적용하긴 힘들 것이다. 이러한 한계점을 해결하기 위해 Soft Margin SVM이 개발되었다. Soft Margin SVM은 Hard Margin SVM의 support vector가 위치한 경계선에서 slack variable을 두어 오류를 일정 수준 허용해주는 방법이다.
+
+이때 선형 분리를 하기 힘든 예제를 다시 생성하였고 이 데이터를 가지고 실험을 진행하였다.
+
 ![image](https://user-images.githubusercontent.com/115562646/199666949-26345b6f-9471-41a4-a6bc-e804cadcc406.png)
 상단 그림의 수식에서 C는 hyperparameter인 slack variable이며 일종의 penalty라고 볼 수 있다.
 * C가 커지면 오류를 허용하는 정도가 작아지며, 따라서 Margin이 작아진다.
