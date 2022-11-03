@@ -22,7 +22,7 @@ Support vector machines(SVM)은 머신러닝 분야 중 하나로써 신호 처�
 ![image](https://user-images.githubusercontent.com/115562646/199581342-49bcf5c4-d833-49f2-bd87-4483e5d64ea7.png)
  
 </p>
-```
+``````
 python
 import os
 import numpy as np
