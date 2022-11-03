@@ -5,10 +5,10 @@
 이번 튜토리얼에서는 SVM을 소개하고 정형 데이터셋을 통해서 다양한 kernel과 SVM을 적용해보는 것을 목표로 한다.
 
 ### 튜토리얼 목차
- 1.
- 2.
- 3.
- 4.
+ 1. Support Vector Machines(SVM)이란?
+ 2. Linear SVMs - Hard Margin Classification
+ 3. Soft Margin Classification
+ 4. NonLinear SVM Classification with Kernel Functions
 
 
 
@@ -22,19 +22,43 @@ Support vector machines(SVM)은 머신러닝 분야 중 하나로써 신호 처�
 ![image](https://user-images.githubusercontent.com/115562646/199581342-49bcf5c4-d833-49f2-bd87-4483e5d64ea7.png)
  
 </p>
+import os
+import numpy as np
 
+%matplotlib inline
+import matplotlib
+import matplotlib.pyplot as plt
+import seaborn as sn
 
-## 2. Linear SVMs
+from sklearn.svm import SVC
+from sklearn import datasets
+from sklearn.datasets import make_classification
+
+plt.figure(figsize=(8, 8))
+plt.title("두개의 독립변수 모두 클래스와 상관관계가 있는 가상데이터")
+X, y = make_classification(n_samples=100, n_features=2, n_informative=2, n_redundant=0,
+                           n_clusters_per_class=1, random_state=11111)
+plt.scatter(X[:, 0], X[:, 1], marker='o', c=y,
+            s=100, edgecolor="k", linewidth=2)
+
+plt.xlim(-4, 4)
+plt.ylim(-4, 4)
+plt.xlabel("$X_1$")
+plt.ylabel("$X_2$")
+plt.show()
+
+## 2. Linear SVMs - Hard Margin Classification
 
 Linear SVM은 데이터 포인트들을 최대한 잘 구분해내는 선형분리를 찾는 것이 목적이며, 아래 그림과 같이 두 데이터의 클래스를 분리할 수 있는 수 많은 직선들 중 두 데이터 클래스간 간격(margin)이 최대가 되는 MMH(Maximum Marginal Hyperplane, 최대 마진 초평면)을 찾아 구분하는 방법이다.
 ![image](https://user-images.githubusercontent.com/115562646/199652997-789ca4a9-59c0-4a2c-ba9f-d587d687d217.png)
 ![image](https://user-images.githubusercontent.com/115562646/199655813-86c6ea08-e208-4033-9352-8013e36d60c4.png)
 
 
-## 3. Linear SVM Classification - wine dataset
+## 3. Soft Margin Classification
 ![image](https://user-images.githubusercontent.com/115562646/199666949-26345b6f-9471-41a4-a6bc-e804cadcc406.png)
 상단 그림의 수식에서 C는 hyperparameter인 slack variable이며 일종의 penalty라고 볼 수 있다.
 * C가 커지면 오류를 허용하는 정도가 작아지며, 따라서 Margin이 작아진다.
 * C가 작아지면 오류를 허용하는 정도가 커지며, 따라서 Margin이 커진다.
 
 하단에서 C=1일때와 C=100일때 비교를 진행하겠다.
+
