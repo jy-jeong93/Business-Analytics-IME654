@@ -226,3 +226,128 @@ plt.axis([-5, 5, -5, 5]);
 ![image](https://user-images.githubusercontent.com/115562646/199673554-fe546f3b-2c48-4a54-bbbe-ad61f6dec83c.png)
 
 C=1일때는 허용해주는 오류 정도가 크기때문에 마진이 커진 것을 확인할 수 있고, C=100일 경우 허용해주는 오류 정도가 적기때문에 마진이 작아진 것을 확인할 수 있다.
+
+
+## 4. NonLinear SVM classification
+현실에는 선형적으로 분류할 수 없는 비선형성을 가진 데이터셋이 많다. 따라서 Hard Margin SVM과 Soft Margin SVM으로는 한계가 있을 것이다. 이러한 한계점들을 개선하기 위해 kernel 함수를 이용하여 비선형 데이터셋을 고차원으로 보내어 선형 분리가 가능하게끔 만들어주는 방법들이 있다.
+
+![image](https://user-images.githubusercontent.com/115562646/199674110-f4aa27f8-7e0f-4295-adcd-a34864fee6d7.png)
+
+
+![image](https://user-images.githubusercontent.com/115562646/199674345-a8cdc9c8-12c4-466c-9f36-230790b85de1.png)
+
+![image](https://user-images.githubusercontent.com/115562646/199674390-197457d8-857e-4cb6-8694-fec2d1164d60.png)
+
+
+
+
+아래에서는 sklearn에서 제공하는 make moons로 선형분류가 힘든 데이터셋을 임의로 만들었다. 만들어진 데이터셋에 Polynomial Kernel과 RBF Kernel을 적용할 것이다.
+```python
+from sklearn.datasets import make_moons
+
+X, y = make_moons(n_samples=300, noise=0.15, random_state=2022)
+
+def plot_dataset(X, y, axes):
+    plt.plot(X[:, 0][y==0], X[:, 1][y==0], "bs")
+    plt.plot(X[:, 0][y==1], X[:, 1][y==1], "g^")
+    plt.axis(axes)
+    plt.grid(True, which='both')
+    plt.xlabel(r"$x_1$", fontsize=20)
+    plt.ylabel(r"$x_2$", fontsize=20, rotation=0)
+
+plot_dataset(X, y, [-1.5, 2.5, -1, 1.5])
+plt.show()
+```
+![image](https://user-images.githubusercontent.com/115562646/199674465-e6e30663-3d37-433a-b6a7-26b7060e3411.png)
+
+
+```python
+
+from sklearn.preprocessing import PolynomialFeatures
+
+polynomial_svm_clf = Pipeline([
+    ('poly_features', PolynomialFeatures(degree=3)),
+    ('scaler', StandardScaler()),
+    ('svm_clf', LinearSVC(C=10, loss='hinge', random_state=42))
+])
+
+polynomial_svm_clf.fit(X, y)
+def plot_predictions(clf, axes):
+    x0s = np.linspace(axes[0], axes[1], 100)
+    x1s = np.linspace(axes[2], axes[3], 100)
+    x0, x1 = np.meshgrid(x0s, x1s)
+    X = np.c_[x0.ravel(), x1.ravel()]
+    y_pred = clf.predict(X).reshape(x0.shape)
+    y_decision = clf.decision_function(X).reshape(x0.shape)
+    plt.contourf(x0, x1, y_pred, cmap=plt.cm.brg, alpha=0.2)
+    plt.contourf(x0, x1, y_decision, cmap=plt.cm.brg, alpha=0.1)
+
+plot_predictions(polynomial_svm_clf, [-1.5, 2.5, -1, 1.5])
+plot_dataset(X, y, [-1.5, 2.5, -1, 1.5])
+plt.title('다항 특성을 사용한 Linear SVM 분류기')
+plt.show()
+
+from sklearn.svm import SVC
+
+poly_kernel_svm_clf = Pipeline([
+    ('scaler', StandardScaler()),
+    ('svm_clf', SVC(kernel='poly', degree=3, coef0=0.1, C=5))
+])
+
+poly_kernel_svm_clf.fit(X, y)
+
+
+poly100_kernel_svm_clf = Pipeline([
+        ("scaler", StandardScaler()),
+        ("svm_clf", SVC(kernel="poly", degree=3, coef0=100, C=5))
+    ])
+
+poly100_kernel_svm_clf.fit(X, y)
+
+plt.figure(figsize=(11, 4))
+
+plt.subplot(121)
+plot_predictions(poly_kernel_svm_clf, [-1.5, 2.5, -1, 1.5])
+plot_dataset(X, y, [-1.5, 2.5, -1, 1.5])
+plt.title(r"$d=3, r=0.1, C=5$", fontsize=18)
+
+plt.subplot(122)
+plot_predictions(poly100_kernel_svm_clf, [-1.5, 2.5, -1, 1.5])
+plot_dataset(X, y, [-1.5, 2.5, -1, 1.5])
+plt.title(r"$d=3, r=100, C=5$", fontsize=18)
+
+plt.show()
+```
+
+```python
+gamma1, gamma2 = 0.1, 5
+C1, C2 = 0.001, 1000
+hyperparams = (gamma1, C1), (gamma1, C2), (gamma2, C1), (gamma2, C2)
+
+svm_clfs = []
+for gamma, C in hyperparams:
+    rbf_kernel_svm_clf = Pipeline([
+            ("scaler", StandardScaler()),
+            ("svm_clf", SVC(kernel="rbf", gamma=gamma, C=C))
+        ])
+    rbf_kernel_svm_clf.fit(X, y)
+    svm_clfs.append(rbf_kernel_svm_clf)
+
+plt.figure(figsize=(16, 15))
+
+for i, svm_clf in enumerate(svm_clfs):
+    plt.subplot(221 + i)
+    plot_predictions(svm_clf, [-1.5, 2.5, -1, 1.5])
+    plot_dataset(X, y, [-1.5, 2.5, -1, 1.5])
+    gamma, C = hyperparams[i]
+    plt.title(r"$\gamma = {}, C = {}$".format(gamma, C), fontsize=16)
+
+plt.show()
+```
+
+# Polynomial Kernel 적용시
+![image](https://user-images.githubusercontent.com/115562646/199674639-4e45d3f9-8883-44ab-b075-b0809eb81252.png)
+
+
+# RBF Kernel 적용시
+![image](https://user-images.githubusercontent.com/115562646/199674755-47eca25d-0cb1-4d3a-bb7b-a1e23e513ed7.png)
