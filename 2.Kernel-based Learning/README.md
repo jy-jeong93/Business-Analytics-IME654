@@ -23,6 +23,13 @@ Support vector machines(SVM)은 머신러닝 분야 중 하나로써 신호 처�
  
 </p>
 
+
+## 2. Linear SVMs - Hard Margin Classification
+
+Linear SVM은 데이터 포인트들을 최대한 잘 구분해내는 선형분리를 찾는 것이 목적이며, 아래 그림과 같이 두 데이터의 클래스를 분리할 수 있는 수 많은 직선들 중 두 데이터 클래스간 간격(margin)이 최대가 되는 MMH(Maximum Marginal Hyperplane, 최대 마진 초평면)을 찾아 구분하는 방법이다.
+![image](https://user-images.githubusercontent.com/115562646/199652997-789ca4a9-59c0-4a2c-ba9f-d587d687d217.png)
+![image](https://user-images.githubusercontent.com/115562646/199655813-86c6ea08-e208-4033-9352-8013e36d60c4.png)
+
 ```python
 
 import os
@@ -36,6 +43,13 @@ import seaborn as sn
 from sklearn.svm import SVC
 from sklearn import datasets
 from sklearn.datasets import make_classification
+sn.set()
+plt.rcParams['axes.labelsize'] = 14
+plt.rcParams['xtick.labelsize'] = 12
+plt.rcParams['ytick.labelsize'] = 12
+matplotlib.rc('font', family='Malgun Gothic')  # Windows
+plt.rcParams['axes.unicode_minus'] = False
+
 
 plt.figure(figsize=(8, 8))
 plt.title("두개의 독립변수 모두 클래스와 상관관계가 있는 가상데이터")
@@ -54,12 +68,59 @@ plt.show()
 ![image](https://user-images.githubusercontent.com/115562646/199671510-d6e2364e-dcfb-43e3-b857-98fe42fbbb91.png)
 
 
+```python
 
-## 2. Linear SVMs - Hard Margin Classification
+# SVM 분류 모델
+svm_clf = SVC(kernel="linear", C=float("inf"))
+svm_clf.fit(X, y)
 
-Linear SVM은 데이터 포인트들을 최대한 잘 구분해내는 선형분리를 찾는 것이 목적이며, 아래 그림과 같이 두 데이터의 클래스를 분리할 수 있는 수 많은 직선들 중 두 데이터 클래스간 간격(margin)이 최대가 되는 MMH(Maximum Marginal Hyperplane, 최대 마진 초평면)을 찾아 구분하는 방법이다.
-![image](https://user-images.githubusercontent.com/115562646/199652997-789ca4a9-59c0-4a2c-ba9f-d587d687d217.png)
-![image](https://user-images.githubusercontent.com/115562646/199655813-86c6ea08-e208-4033-9352-8013e36d60c4.png)
+x0 = np.linspace(-5, 5.5, 200)
+pred_1 = 5*x0 - 5
+pred_2 = x0 - 1.8
+pred_3 = 0.1 * x0 + 0.5
+
+def plot_svc_decision_boundary(svm_clf, xmin, xmax):
+    w = svm_clf.coef_[0]
+    b = svm_clf.intercept_[0]
+
+    # 결정 경계에서 w0*x0 + w1*x1 + b = 0 이므로
+    # => x1 = -w0/w1 * x0 - b/w1
+    x0 = np.linspace(xmin, xmax, 200)
+    decision_boundary = -w[0]/w[1] * x0 - b/w[1]
+
+    margin = 1/w[1]
+    gutter_up = decision_boundary + margin
+    gutter_down = decision_boundary - margin
+
+    svs = svm_clf.support_vectors_  # support vectors
+    plt.scatter(svs[:, 0], svs[:, 1], s=180, facecolors='#FFAAAA')
+    plt.plot(x0, decision_boundary, "k-", linewidth=2)
+    plt.plot(x0, gutter_up, "k--", linewidth=2)
+    plt.plot(x0, gutter_down, "k--", linewidth=2)
+
+plt.figure(figsize=(15,4))
+
+plt.subplot(121)
+plt.plot(x0, pred_1, "g--", linewidth=2)
+plt.plot(x0, pred_2, "m-", linewidth=2)
+plt.plot(x0, pred_3, "r-", linewidth=2)
+plt.plot(X[:, 0][y==1], X[:, 1][y==1], "bs", label="class0")
+plt.plot(X[:, 0][y==0], X[:, 1][y==0], "yo", label="class1")
+plt.xlabel("feature1", fontsize=14)
+plt.ylabel("feature2", fontsize=14)
+plt.legend(loc="upper left", fontsize=14)
+plt.axis([-3, 5.5, 0, 2])
+
+plt.subplot(122)
+plot_svc_decision_boundary(svm_clf, -5, 5.5)
+plt.plot(X[:, 0][y==1], X[:, 1][y==1], "bs")
+plt.plot(X[:, 0][y==0], X[:, 1][y==0], "yo")
+plt.xlabel("feature1", fontsize=14)
+plt.axis([-3, 5.5, 0, 2])
+
+plt.show()
+
+```
 
 
 ## 3. Soft Margin Classification
