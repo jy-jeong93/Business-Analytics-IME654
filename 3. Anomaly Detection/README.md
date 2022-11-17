@@ -72,7 +72,7 @@ Isolation Forest와 SVM, LOF를 사용하여 'creditcard.csv'데이터에 대해
 
 각 방법론들에 대한 hyperparameter는 다음과 같다.
 
-'''python
+```python
 classifiers = {
     "Isolation Forest":IsolationForest(n_estimators=100, max_samples=len(X), 
                                        contamination=outlier_fraction,random_state=state, verbose=0),
@@ -103,8 +103,7 @@ for i, (clf_name,clf) in enumerate(classifiers.items()):
     print(accuracy_score(Y,y_pred))
     print("Classification Report :")
     print(classification_report(Y,y_pred))
-
-'''
+```
 
 다음은 해당 검증 데이터셋에 대한 각각의 성능을 보여주는 표이다.
 |          |1-class SVM|   I-Forest|       LOF|
