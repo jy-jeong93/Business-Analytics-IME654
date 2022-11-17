@@ -71,6 +71,7 @@ Isolation Forest와 SVM, LOF를 사용하여 'creditcard.csv'데이터에 대해
 
 
 각 방법론들에 대한 hyperparameter는 다음과 같다.
+
 '''python
 classifiers = {
     "Isolation Forest":IsolationForest(n_estimators=100, max_samples=len(X), 
