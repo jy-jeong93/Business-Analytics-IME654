@@ -37,10 +37,6 @@ Anomaly detection은 다음과 같이 크게 세 가지 갈래로 나누어 생�
 
 
 
-Isolation Forest와 SVM, LOF를 비교하여 분석할 것이고, Reconstruction-based 방법론인 Auto-Encoder based method중에서 convolutional auto encoder를 사용할 것이다.
-
-
-
 
 
 ## Isolation Forest, SVM, LOF
@@ -69,6 +65,53 @@ Isolation Forest와 SVM, LOF를 사용하여 'creditcard.csv'데이터에 대해
 |:-:|:-------:|:-----------:|:----------------:|
 | 0 |    0    |       284315|             99.83|
 | 1 |    1    |          492|              0.17|
+
+또한, 학습용 데이터와 검증용 데이터를 9:1 비율로 나누어 실험을 진행할 것이다.
+
+
+
+각 방법론들에 대한 hyperparameter는 다음과 같다.
+'''python
+classifiers = {
+    "Isolation Forest":IsolationForest(n_estimators=100, max_samples=len(X), 
+                                       contamination=outlier_fraction,random_state=state, verbose=0),
+    "Local Outlier Factor":LocalOutlierFactor(n_neighbors=20, algorithm='auto', 
+                                              leaf_size=30, metric='minkowski',
+                                              p=2, metric_params=None, contamination=outlier_fraction),
+    "Support Vector Machine":OneClassSVM(kernel='rbf', degree=3, gamma=0.1,nu=0.05, 
+                                         max_iter=-1)
+   
+}
+n_outliers = len(Fraud)
+for i, (clf_name,clf) in enumerate(classifiers.items()):
+    if clf_name == "Local Outlier Factor":
+        y_pred = clf.fit_predict(X)
+        scores_prediction = clf.negative_outlier_factor_
+    elif clf_name == "Support Vector Machine":
+        clf.fit(X)
+        y_pred = clf.predict(X)
+    else:    
+        clf.fit(X)
+        scores_prediction = clf.decision_function(X)
+        y_pred = clf.predict(X)
+    y_pred[y_pred == 1] = 0
+    y_pred[y_pred == -1] = 1
+    n_errors = (y_pred != Y).sum()
+    print("{}: {}".format(clf_name,n_errors))
+    print("Accuracy Score :")
+    print(accuracy_score(Y,y_pred))
+    print("Classification Report :")
+    print(classification_report(Y,y_pred))
+
+'''
+
+다음은 해당 검증 데이터셋에 대한 각각의 성능을 보여주는 표이다.
+|          |1-class SVM|   I-Forest|       LOF|
+|:--------:|:---------:|:---------:|:--------:|
+| Accuracy |   0.7010  |   0.9974  |  0.9966  |
+
+
+
 
 
 
