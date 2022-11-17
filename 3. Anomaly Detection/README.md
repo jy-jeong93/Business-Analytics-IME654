@@ -114,6 +114,10 @@ for i, (clf_name,clf) in enumerate(classifiers.items()):
 
 
 
+성능 지표 중 가장 저조한 성능을 보인 1-class SVM에 대해서만 추가적인 hyperparameter를 탐색해볼 것이다.
+|1-Class SVM|gamma=0.2, nu=0.05|gamma=0.05, nu=0.05|gamma=0.1, nu=0.1|
+|:---------:|:----------------:|:-----------------:|:---------------:|
+|  Accuracy |      0.3946      |       -      |      -     |
 
 
 
