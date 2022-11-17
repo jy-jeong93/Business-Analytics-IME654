@@ -43,10 +43,6 @@ Isolation Forest와 SVM, LOF를 비교하여 분석할 것이고, Reconstruction
 
 
 
-1. 
+## 1. Isolation Forest와 SVM, LOF를 사용하여 'creditcard.csv'데이터에 대해 금융 사기 건수 이상치 탐지를 진행할 것이다.
 
-```python
-data = pd.read_csv('creditcard.csv',sep=',')
-data.head()
 
-```
