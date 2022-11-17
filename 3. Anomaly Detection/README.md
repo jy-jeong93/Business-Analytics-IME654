@@ -40,3 +40,13 @@ Anomaly detection은 다음과 같이 크게 세 가지 갈래로 나누어 생�
 Isolation Forest와 SVM, LOF를 비교하여 분석할 것이고, Reconstruction-based 방법론인 Auto-Encoder based method중에서 convolutional auto encoder를 사용할 것이다.
 
 
+
+
+
+1. 
+
+```python
+data = pd.read_csv('creditcard.csv',sep=',')
+data.head()
+
+```
