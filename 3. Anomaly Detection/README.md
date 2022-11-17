@@ -1,6 +1,6 @@
 ## Anomaly Detection with Python Tutorial
 
-#### --Anomaly Detection 설명 ([ppt slide]([https://github.com/jy-jeong93/Business-Analytics-IME654/blob/main/3.%20Anomaly%20Detection/%EB%B9%84%EC%A6%88%EB%8B%88%EC%8A%A4%EC%95%A0%EB%84%90%EB%A6%AC%ED%8B%B1%EC%8A%A4_%EC%9D%B4%EC%83%81%EC%B9%98%ED%83%90%EC%A7%80.pdf]
+#### --Anomaly Detection 설명 ([ppt slide](https://github.com/jy-jeong93/Business-Analytics-IME654/blob/main/3.%20Anomaly%20Detection/%EB%B9%84%EC%A6%88%EB%8B%88%EC%8A%A4%EC%95%A0%EB%84%90%EB%A6%AC%ED%8B%B1%EC%8A%A4_%EC%9D%B4%EC%83%81%EC%B9%98%ED%83%90%EC%A7%80.pdf))--
 
 이번 튜토리얼에서는 anomaly detection을 소개하고 정형 데이터셋을 통해서 다양한 이상치 탐지 기법을 적용해보는 것을 목표로 한다.
 
