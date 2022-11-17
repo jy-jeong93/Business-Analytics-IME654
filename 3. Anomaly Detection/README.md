@@ -21,7 +21,7 @@ Anomaly detection은 다음과 같이 크게 세 가지 갈래로 나누어 생�
 
 
 그렇다면 이상치란 무엇이며, anomaly와 novelty 차이는 무엇일까?
-비정상 sample의 정의하는 방식에 따른 분류 차이이며, anomaly를 정의하는 방식을 잘 살펴보고 접근해야 한다.
+비정상 sample의 정의하는 방식에 따른 분류 차이이며 anomaly를 정의하는 방식을 잘 살펴보고 접근해야 한다.,                       
 ![image](https://user-images.githubusercontent.com/115562646/202421720-309a11b5-dcb4-4be6-839d-46a895a3f5a2.png)
 
 학습시 비정상 sample의 사용 여부 및 label 유무에 따른 분류
