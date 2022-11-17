@@ -21,7 +21,8 @@ Anomaly detection은 다음과 같이 크게 세 가지 갈래로 나누어 생�
   * Auto-Encoder based method: 고차원 데이터에서 주로 사용하는 방법론으로써 데이터를 압축/복원하여 복원된 정도로 이상치를 판단
 
 
-그렇다면 이상치란 무엇이며, anomaly와 novelty 차이는 무엇일까?
+###### 그렇다면 이상치란 무엇이며, anomaly와 novelty 차이는 무엇일까?
+
 비정상 sample의 정의하는 방식에 따른 분류 차이이며 anomaly를 정의하는 방식을 잘 살펴보고 접근해야 한다.
 
 ![image](https://user-images.githubusercontent.com/115562646/202421720-309a11b5-dcb4-4be6-839d-46a895a3f5a2.png)
