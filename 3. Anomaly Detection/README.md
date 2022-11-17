@@ -37,6 +37,6 @@ Anomaly detection은 다음과 같이 크게 세 가지 갈래로 나누어 생�
 
 
 
-위 방법론들 중에서 Model-based 방법론인 Isolation Forest와 Reconstruction-based 방법론인 Auto-Encoder based method중에서 Variational auto encoder를 사용할 것이다.
+Isolation Forest와 SVM, LOF를 비교하여 분석할 것이고, Reconstruction-based 방법론인 Auto-Encoder based method중에서 convolutional auto encoder를 사용할 것이다.
 
 
