@@ -10,3 +10,7 @@
 
 ## 2. Kernel-based Learning
 * Support Vector Machine(SVM) [[here]](https://github.com/jy-jeong93/Business-Analytics-IME654/tree/main/2.Kernel-based%20Learning)
+
+
+## 3. Anomaly Detection
+* Anomaly Detection [[here]](https://github.com/jy-jeong93/Business-Analytics-IME654/tree/main/3.%20Anomaly%20Detection)
