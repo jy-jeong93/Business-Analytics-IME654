@@ -61,7 +61,7 @@ Low Bias, High Variance 단일 모델: Decision Tree, ANN, SVM, k값이 작은 K
 # Ensemble 기법을 활용한 MNIST 데이터 분석
 MNIST 데이터셋은 28x28 gray scale이며 0~9까지의 숫자 이미지 데이터셋이다. 전체 데이터셋은 총 70000만장이며 이를 학습에는 60000만장, 테스트에는 10000장 활용할 것이다.
 
-'''python
+```python
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -77,4 +77,4 @@ X_test, y_test = testset.data.numpy().reshape(-1,28*28), testset.targets.numpy()
 
 X = {'train':X_train, 'test':X_test}
 y = {'train':y_train, 'test':y_test}
-'''
+```
