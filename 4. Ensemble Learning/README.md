@@ -36,7 +36,24 @@ voting은 크게 Hard voting과 soft voting으로 나눌 수 있다.
 다음 이미지는 다양한 데이터셋에 대한 각 알고리즘들 성능 비교 예시이다. (https://www.kdnuggets.com/2019/09/no-free-lunch-data-science.html)
 ![image](https://user-images.githubusercontent.com/115562646/205047080-c6e31605-702b-4350-b77a-ec5f9b663bde.png)
 
+그래서 어떤 알고리즘(모델)이 가장 우월한지, 더 일반성을 확보한 모델은 무엇인지에 대해서 생각해보면 위의 이미지와 같이 그런 알고리즘은 없다고 할 수 있다.
+성능이 좋다고하는 알고리즘도 어떤 데이터셋이 주어지느냐에 따라서 성능이 달라진다. No Free Lunch Theorem의 요지는 '모든 문제에 대하여 다른 모델보다 항상 우월한 모델은 없다'이다.
+학습이 된 모델은 주어진 데이터에 대해서 걸맞는 패턴을 학습하고 적응을 했다고 볼 수 있기 때문에 어떤 데이터셋(어떤 문제)에 대해서도 항상 우월한 모델은 없다고 생각한다.
 
 
 
+# Bias-Variance Decomposition
+특정 데이터에 대한 오차를 편향과 분산에 의한 에러로 나눌 수 있다. 편향(Bias)은 정답과 평균 추정치 차이고 분산(Variance)은 평균 추정치와 특정 데이터셋에 대한 추정치 차이를 의미한다. 편향이 높으면 과소적합이 발생하며, 분산이 높으면 과적합이 발생한다.
+
+아래는 편향과 분산에 대한 수식 및 예시 이미지이다.
+![image](https://user-images.githubusercontent.com/115562646/205048472-3fa62c02-d547-4182-887d-80c98715f71c.png)
+편향과 분산으로 나누어서 앙상블 기법을 생각할 수 있다.
+
+# Ensemble learning의 목적
+앙상블의 목적은 각 단일 모델의 좋은 성능을 유지시키면서 다양성(diversity)을 확보하는데 있다.
+* Implicit diversity : 전체 데이터셋의 부분집합에 해당하는 여러 데이터셋을 준비한 뒤 따로 학습
+* Explicit diversity : 먼저 생성된 모델의 측정값으로부터 새로운 모델을 생성하여 학습
+
+Low Bias, High Variance 단일 모델: Decision Tree, ANN, SVM, k값이 작은 K-NN 등 이러한 모델에 대해서는 Bagging이나 Random Forest 등을 통해서 분산을 줄이면 효과적일 것이다.
+반대로 High Bias, Low Variance 단일 모델: Logistic Regression, k값이 큰 K-NN 등에 대해서는 Boosting을 통해서 편향을 줄이면 효과적일 것이다.
 
