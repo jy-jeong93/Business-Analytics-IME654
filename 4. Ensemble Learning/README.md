@@ -105,8 +105,36 @@ for clf in (log_clf, rnd_clf, svm_clf, hardvoting_clf):
     y_pred = clf.predict(X_test)
     print(clf.__class__.__name__, accuracy_score(y_test, y_pred))
 ```
-
+### Hard voting 결과
 |Hard Voting|Logistic Regression|RandomForest|VotingClassifier|
 |:---------:|:-----------------:|:----------:|:--------------:|
 | Accuracy  |      0.9255       |   0.9690   |     0.9709     |
 
+
+
+```python
+log_clf = LogisticRegression(random_state=2022)
+rnd_clf = RandomForestClassifier(random_state=2022)
+svm_clf = SVC(probability=True, random_state=2022)
+
+softvoting_clf = VotingClassifier(
+    estimators=[('lr', log_clf), ('rf', rnd_clf), ('svc', svm_clf)], voting='soft')
+softvoting_clf.fit(X_train, y_train)
+
+for clf in (log_clf, rnd_clf, svm_clf, softvoting_clf):
+    clf.fit(X_train, y_train)
+    y_pred = clf.predict(X_test)
+    print(clf.__class__.__name__, accuracy_score(y_test, y_pred))
+```
+
+
+### Soft voting 결과
+|Soft Voting|Logistic Regression|RandomForest|VotingClassifier|
+|:---------:|:-----------------:|:----------:|:--------------:|
+| Accuracy  |      0.9255       |   0.9690   |     0.9709     |
+
+
+
+Hard voting과 soft voting 결과를 비교해본 결과, 성능면에서는 차이가 거의 없었다.
+두 Voting의 연산에 대해서 생각을 해보았을때는 soft voting이 더 정교한 확률을 구하는 방식이므로 좋을 것이라고 생각했었다.
+그러나 ensemble 개념과 같이 어떤 voting이 더 좋다라고는 할 수 없을 것이다. 문제 상황과 데이터셋에 맞는 합리적인 voting방식을 생각하고 구현하는 것이 더 중요할 것이라 생각한다.
