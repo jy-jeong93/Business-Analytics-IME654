@@ -57,3 +57,24 @@ voting은 크게 Hard voting과 soft voting으로 나눌 수 있다.
 Low Bias, High Variance 단일 모델: Decision Tree, ANN, SVM, k값이 작은 K-NN 등 이러한 모델에 대해서는 Bagging이나 Random Forest 등을 통해서 분산을 줄이면 효과적일 것이다.
 반대로 High Bias, Low Variance 단일 모델: Logistic Regression, k값이 큰 K-NN 등에 대해서는 Boosting을 통해서 편향을 줄이면 효과적일 것이다.
 
+
+# Ensemble 기법을 활용한 MNIST 데이터 분석
+MNIST 데이터셋은 28x28 gray scale이며 0~9까지의 숫자 이미지 데이터셋이다. 전체 데이터셋은 총 70000만장이며 이를 학습에는 60000만장, 테스트에는 10000장 활용할 것이다.
+
+'''python
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+import torchvision.datasets as datasets
+
+trainset = datasets.MNIST(root='./data', train=True, download=False)
+testset = datasets.MNIST(root='./data', train=False, download=False)
+
+X_train, y_train = trainset.data.numpy().reshape(-1,28*28), trainset.targets.numpy()
+X_test, y_test = testset.data.numpy().reshape(-1,28*28), testset.targets.numpy()
+
+X = {'train':X_train, 'test':X_test}
+y = {'train':y_train, 'test':y_test}
+'''
