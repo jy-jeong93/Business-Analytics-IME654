@@ -78,3 +78,35 @@ X_test, y_test = testset.data.numpy().reshape(-1,28*28), testset.targets.numpy()
 X = {'train':X_train, 'test':X_test}
 y = {'train':y_train, 'test':y_test}
 ```
+
+### Hard voting과 Soft voting 비교
+* Hard voting: 각 하위 학습 모델(weak learner)들의 예측 결과값을 바탕으로 다수결 투표를 하는 방식
+* Soft Voting: 각 하위 학습 모델(weak learner)들의 예측 확률값의 평균 또는 가중치 합을 사용하는 방식
+ 
+MNIST 분류 문제를 풀어보기 위해서 실험에서 사용할 하위 학습 모델은 Logistic regression, random forest(classification), support vector classification이다.
+
+```python
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import VotingClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+
+log_clf = LogisticRegression(random_state=2022)
+rnd_clf = RandomForestClassifier(random_state=2022)
+svm_clf = SVC(random_state=2022)
+
+hardvoting_clf = VotingClassifier(
+    estimators=[('lr', log_clf), ('rf', rnd_clf), ('svc', svm_clf)], voting='hard')
+hardvoting_clf.fit(X_train, y_train)
+
+for clf in (log_clf, rnd_clf, svm_clf, hardvoting_clf):
+    clf.fit(X_train, y_train)
+    y_pred = clf.predict(X_test)
+    print(clf.__class__.__name__, accuracy_score(y_test, y_pred))
+```
+
+|Hard Voting|Logistic Regression|RandomForest|VotingClassifier|
+|:---------:|:-----------------:|:----------:|:--------------:|
+| Accuracy  |      0.9255       |   0.9690   |     0.9709     |
+
