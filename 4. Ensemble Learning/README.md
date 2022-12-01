@@ -174,6 +174,12 @@ print('RandomForest Accuracy =', accuracy_score(y_test, y_pred_rf))
 단일 의사결정나무에 배깅 기법을 적용하여 다양성을 더욱 확보한 랜덤포레스트가 더 낮은 성능을 보이는 것은 하이퍼파라미터때문이라고 생각한다. 
 따라서 하이퍼파라미터 gridsearch를 수행하고 단일 의사결정나무와 성능을 재비교하였다.
 
+Gridsearch
+*n_setimators = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500]
+*max_depth = [1, 2, 3, 4, 5, 6, 7, 8, 9, None]
+*min_samples_leaf = [1, 2, 4, 8, 16]
+*min_samples_split = [1, 2, 4, 8, 16]
+
 ```python
 from sklearn.model_selection import GridSearchCV
 
@@ -193,4 +199,40 @@ grid_cv.fit(X_train, y_train)
 print('최적 하이퍼 파라미터:', grid_cv.best_params_)
 print('최적 예측 정확도: {0:.4f}'.format(grid_cv.best_score_))
 ```
+```python
+최적 하이퍼 파라미터: {'max_depth': None, 'min_samples_leaf': 1, 'min_samples_split': 2, 'n_estimators': 500}
+최적 예측 정확도: 0.9643
+```
+
+
+```python
+rf_run = RandomForestClassifier(random_state=2022, 
+                               max_depth=grid_cv.best_params_.get('max_depth'),
+                               min_samples_leaf=grid_cv.best_params_.get('min_samples_leaf'),
+                               min_samples_split=grid_cv.best_params_.get('min_samples_split'),
+                               n_estimators=grid_cv.best_params_.get('n_estimators'),
+                               )
+
+rf_run.fit(X_train, y_train)
+y_pred_rf = rf_run.predict(X_test)
+print('RandomForest with grid search Accuracy =', accuracy_score(y_test, y_pred_rf))
+```
+```python
+RandomForest with grid search Accuracy = 0.9709
+```
+
+### 단일 의사결정나무와 랜덤포레스트(grid search) 재비교
+|Soft Voting|Decision Tree|RandomForest|RandomForest with grid search|
+|:---------:|:-----------:|:----------:|:---------------------------:|
+| Accuracy  |    0.8793   |   0.8278   |           0.9709            |
+
+Grid search를 통해서 랜덤포레스트 하이퍼파라미터를 탐색하였고 정확도가 약 0.14 올랐다.
+단일 의사결정나무와 비교를 하였을때도 랜덤포레스트가 배깅 기법을 적용한 만큼 압도적으로 좋은 성능을 보임을 확인하였다.
+
+
+### 특성 중요도 확인
+학습된 랜덤 포레스트를 통해서 이미지 데이터의 어떤 픽셀이 중요한지, 중요도를 반영한 이미지이다.
+숫자를 나타내는 중앙 부근 픽셀들이 역시 중요한 픽셀이라고 학습됨을 확인했다.
+![image](https://user-images.githubusercontent.com/115562646/205122369-8dd500e1-28bf-4834-9297-b05774b7cf16.png)
+
 
