@@ -61,6 +61,9 @@ Low Bias, High Variance 단일 모델: Decision Tree, ANN, SVM, k값이 작은 K
 # Ensemble 기법을 활용한 MNIST 데이터 분석
 MNIST 데이터셋은 28x28 gray scale이며 0~9까지의 숫자 이미지 데이터셋이다. 전체 데이터셋은 총 70000만장이며 이를 학습에는 60000만장, 테스트에는 10000장 활용할 것이다.
 
+![image](https://user-images.githubusercontent.com/115562646/205064709-12d977e6-98e9-453d-9bc0-e11d223ea8cd.png)
+
+
 ```python
 import numpy as np
 import pandas as pd
@@ -83,7 +86,7 @@ y = {'train':y_train, 'test':y_test}
 * Hard voting: 각 하위 학습 모델(weak learner)들의 예측 결과값을 바탕으로 다수결 투표를 하는 방식
 * Soft Voting: 각 하위 학습 모델(weak learner)들의 예측 확률값의 평균 또는 가중치 합을 사용하는 방식
  
-MNIST 분류 문제를 풀어보기 위해서 실험에서 사용할 하위 학습 모델은 Logistic regression, random forest(classification), support vector classification이다.
+MNIST 분류 문제를 풀어보기 위해서 voting에 사용할 하위 학습 모델은 Logistic regression, random forest(classification), support vector classification이다.
 
 ```python
 from sklearn.ensemble import RandomForestClassifier
@@ -106,9 +109,9 @@ for clf in (log_clf, rnd_clf, svm_clf, hardvoting_clf):
     print(clf.__class__.__name__, accuracy_score(y_test, y_pred))
 ```
 ### Hard voting 결과
-|Hard Voting|Logistic Regression|RandomForest|VotingClassifier|
-|:---------:|:-----------------:|:----------:|:--------------:|
-| Accuracy  |      0.9255       |   0.9690   |     0.9709     |
+|Hard Voting|Logistic Regression|RandomForest|   SVC   |VotingClassifier|
+|:---------:|:-----------------:|:----------:|:-------:|:--------------:|
+| Accuracy  |      0.9255       |   0.9690   |  0.9782 |     0.9709     |
 
 
 
@@ -129,12 +132,65 @@ for clf in (log_clf, rnd_clf, svm_clf, softvoting_clf):
 
 
 ### Soft voting 결과
-|Soft Voting|Logistic Regression|RandomForest|VotingClassifier|
-|:---------:|:-----------------:|:----------:|:--------------:|
-| Accuracy  |      0.9255       |   0.9690   |     0.9709     |
+|Soft Voting|Logistic Regression|RandomForest|   SVC   |VotingClassifier|
+|:---------:|:-----------------:|:----------:|:-------:|:--------------:|
+| Accuracy  |      0.9255       |   0.9690   |  0.9792 |     0.9718     |
 
 
 
-Hard voting과 soft voting 결과를 비교해본 결과, 성능면에서는 차이가 거의 없었다.
+Hard voting과 soft voting 결과를 비교해본 결과 SVC와 VotingClassifier 성능에서 soft voting 방식이 조금 더 좋았다.
 두 Voting의 연산에 대해서 생각을 해보았을때는 soft voting이 더 정교한 확률을 구하는 방식이므로 좋을 것이라고 생각했었다.
 그러나 ensemble 개념과 같이 어떤 voting이 더 좋다라고는 할 수 없을 것이다. 문제 상황과 데이터셋에 맞는 합리적인 voting방식을 생각하고 구현하는 것이 더 중요할 것이라 생각한다.
+
+
+
+### 단일 Decision Tree와 Random Forest 비교
+단일 의사결정나무 모델과 배깅을 적용한 의사결정나무의 앙상블인 랜덤 포레스트간 성능 차이를 비교한다. 또한 학습된 랜덤 포레스트를 통해서 이미지 데이터의 어떤 픽셀이 중요한지, 중요도를 반영하여 그래프로 나타내볼 것이다.
+
+```python
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+
+tree_clf = DecisionTreeClassifier(random_state=2022)
+tree_clf.fit(X_train, y_train)
+y_pred_tree = tree_clf.predict(X_test)
+print('DecisionTree Accuracy =', accuracy_score(y_test, y_pred_tree))
+
+# Random Forest
+rnd_clf = RandomForestClassifier(n_estimators=500, max_leaf_nodes=16, n_jobs=-1, random_state=2022)
+rnd_clf.fit(X_train, y_train)
+y_pred_rf = rnd_clf.predict(X_test)
+print('RandomForest Accuracy =', accuracy_score(y_test, y_pred_rf))
+```
+
+
+### 단일 의사결정나무와 랜덤포레스트 비교
+|Soft Voting|Decision Tree|RandomForest|
+|:---------:|:-----------:|:----------:|
+| Accuracy  |    0.8793   |   0.8278   |
+
+
+단일 의사결정나무가 랜덤포레스트보다 더 좋은 성능을 보였다. 
+단일 의사결정나무에 배깅 기법을 적용하여 다양성을 더욱 확보한 랜덤포레스트가 더 낮은 성능을 보이는 것은 하이퍼파라미터때문이라고 생각한다. 
+따라서 하이퍼파라미터 gridsearch를 수행하고 단일 의사결정나무와 성능을 재비교하였다.
+
+```python
+from sklearn.model_selection import GridSearchCV
+
+temp_list = list(range(1,10))
+temp_list.append(None)
+params = {
+    'n_estimators' : tuple(range(50, 501, 50)),
+    'max_depth' : tuple(temp_list),
+    'min_samples_leaf' : tuple(map(lambda x: 2**x, range(5))),
+    'min_samples_split' : tuple(map(lambda x: 2**x, range(5)))
+}
+
+rf_run = RandomForestClassifier(random_state=2022, n_jobs=-1)
+grid_cv = GridSearchCV(rf_run, param_grid=params, cv=2, n_jobs=-1)
+grid_cv.fit(X_train, y_train)
+
+print('최적 하이퍼 파라미터:', grid_cv.best_params_)
+print('최적 예측 정확도: {0:.4f}'.format(grid_cv.best_score_))
+```
+
