@@ -14,3 +14,7 @@
 
 ## 3. Anomaly Detection
 * Anomaly Detection [[here]](https://github.com/jy-jeong93/Business-Analytics-IME654/tree/main/3.%20Anomaly%20Detection)
+
+
+## 4. Ensemble Learning
+* Ensemble Learning [[here]](https://github.com/jy-jeong93/Business-Analytics-IME654/tree/main/4.%20Ensemble%20Learning)
