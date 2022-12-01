@@ -1,6 +1,6 @@
 ## Ensemble Learning with Python Tutorial
 
-#### --Ensemble Learning 설명 (https://github.com/jy-jeong93/Business-Analytics-IME654/blob/main/4.%20Ensemble%20Learning/%EB%B9%84%EC%A6%88%EB%8B%88%EC%8A%A4%EC%95%A0%EB%84%90%EB%A6%AC%ED%8B%B1%EC%8A%A4_ensemble_learning.pdf)
+#### --Ensemble Learning 설명 ((https://github.com/jy-jeong93/Business-Analytics-IME654/blob/main/4.%20Ensemble%20Learning/%EB%B9%84%EC%A6%88%EB%8B%88%EC%8A%A4%EC%95%A0%EB%84%90%EB%A6%AC%ED%8B%B1%EC%8A%A4_ensemble_learning.pdf))
 
 
 이번 튜토리얼에서는 ensemble learning을 소개하고 정형 데이터셋을 통해서 다양한 앙상블 기법을 적용해보는 것을 목표로 한다.
