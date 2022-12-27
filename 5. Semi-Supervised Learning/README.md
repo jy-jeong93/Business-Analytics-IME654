@@ -173,8 +173,13 @@ def save_checkpoint(state, epoch, checkpoint=args.out, filename='checkpoint.pth.
 
 
 ##### Augmentation 조합 별 FixMatch 성능 결과
+ - Encoder : WideResNet-28-2
+ - Weak augmentation : Rotation
 
-|    Encoder Architecture   |    Strong-aug    | Label (5%) | Label (25%)|Label (100%)|
-|:------------:|:----------------:|:----------:|:----------:|:----------:|
-|WideResNet28-2|   Cutout+Noise   |   0.823    |   **0.891**    |   **0.8278**   |
-|Architecture|Augmentation|Augmentation|
+|   Strong-aug    | Label (5%) | Label (25%)|Label (100%)|
+|:---------------:|:----------:|:----------:|:----------:|
+|   Cutout+Noise  |   0.823    |   **0.891**    |   **0.909**   |
+|   Cutout+Crop   |   0.806    |   0.881    |   0.899  |
+|   Cutout+Rotation  |   0.811    |   0.885    |   0.905   |
+|   Cutout+Shift  |   0.822    |   0.889    |   0.896   |
+
