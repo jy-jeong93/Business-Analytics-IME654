@@ -18,3 +18,6 @@
 
 ## 4. Ensemble Learning
 * Ensemble Learning [[here]](https://github.com/jy-jeong93/Business-Analytics-IME654/tree/main/4.%20Ensemble%20Learning)
+
+## 5. Semi-Supervised Learning
+* FixMatch [[here]](https://github.com/jy-jeong93/Business-Analytics-IME654/tree/main/5.%20Semi-Supervised%20Learning)
