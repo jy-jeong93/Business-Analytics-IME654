@@ -183,3 +183,16 @@ def save_checkpoint(state, epoch, checkpoint=args.out, filename='checkpoint.pth.
 |   Cutout+Rotation  |   0.811    |   0.885    |   0.905   |
 |   Cutout+Shift  |   0.822    |   0.889    |   0.896   |
 
+
+
+ - Weak augmentation : Crop
+ 
+|   Strong-aug    | Label (5%) | Label (25%)|Label (100%)|
+|:---------------:|:----------:|:----------:|:----------:|
+|   Cutout+Noise  |   0.799    |   0.875    |   0.896   |
+|   Cutout+Crop   |   **0.830**    |   0.886    |   0.886  |
+|   Cutout+Rotation  |   0.807    |   0.882    |   0.888   |
+|   Cutout+Shift  |   0.803    |   0.875    |   0.893   |
+
+
+
