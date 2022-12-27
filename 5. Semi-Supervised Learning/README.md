@@ -33,3 +33,67 @@ Fixmatch 방법론에서는 이미지에 대한 weak augmentation, strong augmen
 #### (3) 데이터셋 기본 구축
 ([출처](https://www.kaggle.com/datasets/qingyi/wm811k-wafer-map))에서 제공하는 LSWMD.pkl 파일을 파이썬 실행 경로상에 위치시킨 후, process_wm811k.py를 실행한다.
 Labeled, unlabeled 데이터셋이 설정한 대로 train:valid:test = 8:1:1 비율로 나누어져서 각각의 패턴별로 폴더 상에 구축된다.
+
+
+
+### wm811k_fixmatch.py
+
+##### Train part
+```python
+def train(labeled_trainloader, unlabeled_trainloader, model, optimizer, ema_optimizer, criterion, epoch, use_cuda, desi_p):
+    
+    labeled_train_iter = iter(labeled_trainloader)
+    unlabeled_train_iter = iter(unlabeled_trainloader)
+
+    model.train()
+    for batch_idx in range(args.val_iteration):
+        try:
+            inputs_x, targets_x, _ = labeled_train_iter.next()
+        except:
+            labeled_train_iter = iter(labeled_trainloader)
+            inputs_x, targets_x, _ = labeled_train_iter.next()
+
+        try:
+            (inputs_u, inputs_u2), _, idx_u = unlabeled_train_iter.next()
+        except:
+            unlabeled_train_iter = iter(unlabeled_trainloader)
+            (inputs_u, inputs_u2), _, idx_u = unlabeled_train_iter.next()
+            
+            
+        batch_size = inputs_x.size(0)
+        
+        targets_x = torch.zeros(batch_size, num_class).scatter_(1, targets_x.type(torch.int64).view(-1, 1), 1)
+        if use_cuda:
+            inputs_x, targets_x = inputs_x.cuda(), targets_x.cuda(non_blocking=True)
+            inputs_u, inputs_u2 = inputs_u.cuda(), inputs_u2.cuda()
+        
+        with torch.no_grad():
+                        
+            outputs_u, _ = model(inputs_u)
+            targets_u = torch.softmax(outputs_u, dim=1)
+            
+        max_p, p_hat = torch.max(targets_u, dim=1)
+
+        select_mask1 = max_p.ge(args.tau)
+        select_mask2 = torch.rand(batch_size).cuda() < desi_p[p_hat]
+        select_mask = select_mask1 * select_mask2
+        select_mask = select_mask.float()
+        p_hat = torch.zeros(batch_size, num_class).cuda().scatter_(1, p_hat.view(-1, 1), 1)
+        all_inputs = torch.cat([inputs_x, inputs_u2], dim=0)
+        all_targets = torch.cat([targets_x, p_hat], dim=0)
+
+        all_outputs, _ = model(all_inputs)
+        logits_x = all_outputs[:batch_size]
+        logits_u = all_outputs[batch_size:]
+
+        Lx, Lu = criterion(logits_x, all_targets[:batch_size], logits_u, all_targets[batch_size:], select_mask)
+        loss = Lx + Lu
+
+        # compute gradient and do SGD step
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        ema_optimizer.step()
+```
+
+
