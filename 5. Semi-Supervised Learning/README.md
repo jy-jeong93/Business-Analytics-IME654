@@ -195,4 +195,6 @@ def save_checkpoint(state, epoch, checkpoint=args.out, filename='checkpoint.pth.
 |   Cutout+Shift  |   0.803    |   0.875    |   0.893   |
 
 
+WM811K 데이터셋에 대해서 FixMatch를 적용한 결과, Weak-augmentation을 rotation으로 설정하는 것이 crop으로 설정하는 것보다 상대적으로 더 좋은 성능을 보인다. Unlabeled data에 대해서 더 정확하게 pseudo labeling을 부여하기 위해서, crop보다 단순하게 웨이퍼 빈 맵 회전을 시키는 rotation augmentation을 weak augmenation으로 설정했을 때 더 좋은 성능을 보였다고 생각한다. Strong augmentation에서는 cutout에 Noise를 추가하였을 경우 좋은 성능을 보였다. 단순 기하학적 증강으로 모델이 쉽게 맞출 수 있는 augmentation이 아니라, 웨이퍼 빈 맵에 noise를 추가하여 모델 관점에서는 조금 더 난해하게 증강을 하였을 경우에 효과적인 consistency regularization을 확보할 수 있다고 생각한다.
+
 
