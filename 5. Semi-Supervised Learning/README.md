@@ -174,8 +174,8 @@ def save_checkpoint(state, epoch, checkpoint=args.out, filename='checkpoint.pth.
 
 ##### Augmentation 조합 별 FixMatch 성능 결과
 
-|Encoder|Decision Tree|RandomForest|
-|       |
-|:---------:|:-----------:|:----------:|
-| Accuracy  |    0.8793   |   0.8278   |
+|  Encoder   |    Weak    |   Strong   |
+|Architecture|Augmentation|Augmentation|
+|:----------:|:----------:|:----------:|
+| Accuracy   |    0.8793  |   0.8278   |
 
