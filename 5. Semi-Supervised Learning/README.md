@@ -39,6 +39,8 @@ Labeled, unlabeled 데이터셋이 설정한 대로 train:valid:test = 8:1:1 비
 ### wm811k_fixmatch.py
 
 ##### Train part
+- Labeled 데이터셋과 unlabeled 데이터셋 수가 다르므로 val_iteration을 지정해서 해당 iteration값까지 학습이 진행되고 validation을 하는 방식
+
 ```python
 def train(labeled_trainloader, unlabeled_trainloader, model, optimizer, ema_optimizer, criterion, epoch, use_cuda, desi_p):
     
@@ -96,4 +98,79 @@ def train(labeled_trainloader, unlabeled_trainloader, model, optimizer, ema_opti
         ema_optimizer.step()
 ```
 
+##### Validate part
+ - Train part에서 지정한 val_iteration이 되면 작동하는 part이며, 평가 지표를 accuracy가 아닌 macro f1-score를 사용
+
+```python
+def validate(valloader, model, criterion, use_cuda, mode):
+    
+    # switch to evaluate mode
+    model.eval()
+    
+    classwise_TP = torch.zeros(num_class)
+    classwise_FP = torch.zeros(num_class)
+    classwise_correct = torch.zeros(num_class)
+    classwise_num = torch.zeros(num_class)
+    section_acc = torch.zeros(3)
+    if use_cuda:
+        classwise_TP = torch.zeros(num_class).cuda()
+        classwise_FP = torch.zeros(num_class).cuda()
+        classwise_correct = classwise_correct.cuda()
+        classwise_num = classwise_num.cuda()
+        section_acc = section_acc.cuda()
+
+    with torch.no_grad():
+        for batch_idx, (inputs, targets, _) in enumerate(valloader):
+
+
+            if use_cuda:
+                inputs, targets = inputs.cuda(), targets.cuda(non_blocking=True)
+            outputs, _ = model(inputs)
+            loss = criterion(outputs, targets)
+
+            # classwise prediction
+            pred_label = outputs.max(1)[1]
+            assert pred_label.shape == targets.shape
+            confusion_matrix = torch.zeros(num_class, num_class).cuda()
+            for r, c in zip(targets, pred_label):
+                confusion_matrix[r][c] += 1
+                
+            classwise_num += confusion_matrix.sum(dim=1)
+            classwise_TP += torch.diagonal(confusion_matrix, 0)
+            diag_mask = torch.eye(num_class).cuda()
+            # 순서 주의 : confusion_matrix가 masked_fiil_(diag_mask.bool(), 0)을 통해서 대각원소 0으로 교체돼서 저장됨
+            classwise_FP += confusion_matrix.masked_fill_(diag_mask.bool(), 0).sum(dim=0)
+            
+
+    print('classwise_num')
+    print(classwise_num)  
+    print('classwise_FP')
+    print(classwise_FP)
+    print('classwise_TP')
+    print(classwise_TP)
+    classwise_precision = (classwise_TP / (classwise_TP + classwise_FP))
+    classwise_recall = (classwise_TP / classwise_num)
+    classwise_f1 = torch.nan_to_num((2*classwise_precision*classwise_recall) / (classwise_precision + classwise_recall))
+    if use_cuda:
+        classwise_precision = classwise_precision.cpu()
+        classwise_recall = classwise_recall.cpu()
+        classwise_f1 = classwise_f1.cpu()
+
+    return (classwise_precision.numpy(), classwise_recall.numpy(), classwise_f1.numpy())
+
+
+def save_checkpoint(state, epoch, checkpoint=args.out, filename='checkpoint.pth.tar', is_best=False):
+    filepath = os.path.join(checkpoint, filename)
+    torch.save(state, filepath)
+
+    if epoch % 100 == 0:
+        shutil.copyfile(filepath, os.path.join(checkpoint, 'model_' + str(epoch) + '.pth.tar'))
+    if is_best:
+        shutil.copyfile(filepath, os.path.join(checkpoint, 'best_model.pth.tar'))
+
+    return (section_acc.numpy(), classwise_num.numpy(), classwise_precision.numpy(), classwise_recall.numpy(), classwise_f1.numpy())
+```
+
+
+##### 
 
