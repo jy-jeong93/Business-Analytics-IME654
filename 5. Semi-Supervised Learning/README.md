@@ -15,8 +15,16 @@
 ![image](https://user-images.githubusercontent.com/115562646/209645858-b2ac4a38-af75-4c97-9a11-b8d11ab8823d.png)
 
 
-##### (1) Augmentation 정의
+#### (1) Augmentation 정의
 Fixmatch 방법론에서는 이미지에 대한 weak augmentation, strong augmentation을 정의해야 한다. 하지만 wm811k데이터셋은 RGB 3차원의 컬러 이미지가 아닌 1차원의 gray scale 이미지이다. 따라서 해당 데이터셋 특성에 맞게 augmentation을 임의로 정의하였다.
 아래 그림은 augmentation에 대한 예시이며, strong augmentation에 cutout을 기본적으로 사용한 이유는 FixMatch 본 논문에서 사용했던 strong augmentation 기법 중 유일하게 적용이 가능한 기법이기 때문이다.
 
 ![image](https://user-images.githubusercontent.com/115562646/209646589-625bd8df-4603-4f3f-b241-4a50f0b27b28.png)
+
+
+#### (2) 평가 지표 정의(Macro F1-score)
+해당 데이터셋은 공정 데이터셋이므로 정상 패턴이 불량 패턴에 비해 압도적으로 많다. 따라서 단순 accuracy를 사용하는 것이 아닌 Macro F1-score를 평가 지표로써 사용하였다.
+
+![image](https://user-images.githubusercontent.com/115562646/209646976-3b5e0687-fc48-4797-b791-304cf26d9203.png)
+![image](https://user-images.githubusercontent.com/115562646/209647004-7fe6b567-cfd4-44e3-a399-a91e42ed174f.png)
+
