@@ -24,7 +24,12 @@ Fixmatch 방법론에서는 이미지에 대한 weak augmentation, strong augmen
 
 #### (2) 평가 지표 정의(Macro F1-score)
 해당 데이터셋은 공정 데이터셋이므로 정상 패턴이 불량 패턴에 비해 압도적으로 많다. 따라서 단순 accuracy를 사용하는 것이 아닌 Macro F1-score를 평가 지표로써 사용하였다.
+단순 semi-supervised learning을 불균형 데이터셋에 적용하면 여러 성능 저하 이슈들이 생기지만, Semi-supervised learning 방법론 적용이 목적인 본 튜토리얼과 어울리지 않으므로 생략하였다.
 
 ![image](https://user-images.githubusercontent.com/115562646/209646976-3b5e0687-fc48-4797-b791-304cf26d9203.png)
 ![image](https://user-images.githubusercontent.com/115562646/209647004-7fe6b567-cfd4-44e3-a399-a91e42ed174f.png)
 
+
+#### (3) 데이터셋 기본 구축
+([출처](https://www.kaggle.com/datasets/qingyi/wm811k-wafer-map))에서 제공하는 LSWMD.pkl 파일을 파이썬 실행 경로상에 위치시킨 후, process_wm811k.py를 실행한다.
+Labeled, unlabeled 데이터셋이 설정한 대로 train:valid:test = 8:1:1 비율로 나누어져서 각각의 패턴별로 폴더 상에 구축된다.
